@@ -332,11 +332,9 @@ class GameBoard {
     this.setDistances();
 
     if (isDead) {
-      console.log("You have lost");
       startScreen();
     } else if (hasFoundAllKittens) {
-      console.log("You have found all kittens");
-      this.showEnding();
+      endScreen();
     }
   }
   checkCatCollision() {
@@ -406,23 +404,65 @@ class GameBoard {
       __("#objects", "")
     }
   }
-  showEnding() {
-    setTimeout(startScreen, 10000);
-  }
 }
 
 /* #endregion */
-/* #region Init */
-let game = new GameBoard;
-setButtons();
-
-/* #endregion */
 /* #region Constants */
+const pages = (input) => ({
+  "start": `   <h1>Zocats</h1>
+  <p>Ninja Cats vs Zombie Dogs and their foul allies</p>
+  <h2>Story</h2>
+  <p>The mystical seven kittens of the elemental cat god have been catnapped by the dark forces of the canine necromancer Sseth.</p>
+  <p>If you do not save them he will use their powers to bring back the extinct "Monkeykind", the world enders, who were once his masters and "best friend". </p>
+  <p>Our best operatives claim that Sseth works in collusion with the "Ruinous Rats"; the rats living in the forbidden "Monkeykind" ruins from before the great Apecalypse</p>
+  <h2>Controls</h2>
+  <p>Move by using the ARROW keys or ASWD</p>
+  <h2>Goals</h2>
+  <ul>
+  <li> Collect the seven kittens by navigating to their position </li>
+  <li> Avoid the zombie chasing you by not navigating to its position </li>
+  <li> You have nine lives </li>
+  <li> You have a sixth sense </li>
+  <li> You have no internal vision [ie. 'minimap']</li>
+  <li> Your efforts will be in vain</li>
+  </ul>
+  <button onclick="startGame()">Start the Game</button>
+  <h3>Things you could do instead of playing this "game"</h3>
+  <ul id="alternatives">
+  </ul>`,
+  
+  "game": `   <div id = "statusbar">
+  <p>Super-Hero Ninja Cat!</p>
+  <img id="playerimage" alt="the player image">
+  <p id="health"></p>
+  <p id="savedcats"></p>
+  </div> 
+  <!---- <div id = "minimap"></div> Not implemented yet -->
+  <div id = "gamearea">
+  <img id="areaimage" src="resources/locations/2-1.png" alt="area background">
+  <p id="coordinates"></p>
+  <p id="sixthsense"></p>
+  <p id = "areadescription"> Monkeykind graveyard, we should let them rest in peace </p>
+  </div>
+  <div id="events">
+  <div id="objects"></div>
+  </div>
+  <div id = "navigation">
+  <p>Controls: Navigate using ASWD or arrow keys</p>
+  </div>`,
+  
+  "end" : `<h1>
+  Congratulations! <br> You saved all the kittens and won the game
+  </h1>
+  <button onclick="location.reload()">Back To Title</button>`
+})[input]
+
+
 /**
  * The mapping between direction input and associated movement
  * @param {string} input the input which might represent a valid direction
  * @returns {[int, int]} the direction associated with input
- */
+*/
 const directions = (input) => ({
   "a": [-1, 0],
   "s": [0, -1],
@@ -435,22 +475,41 @@ const directions = (input) => ({
 })[input]
 /* #endregion */
 /* #region Functions */
-function startScreen() {
-  location.reload();
-  //__("#health", "99999999");
+async function startScreen() {
+  document.removeEventListener("keydown", moveFunction);
+   await new Promise(r => setTimeout(r, 2000));
+   setInnerHtml("start");
 }
 function startGame() {
-
+  setInnerHtml("game");
+  setButtons();
+  game = new GameBoard;
+}
+async function endScreen(){
+  document.removeEventListener("keydown", moveFunction);
+  await new Promise(r => setTimeout(r, 2000));
+  setInnerHtml("end");
 }
 function setButtons() {
   // Set event listener for keyboard events
   document.addEventListener(
     "keydown",
-    (event) => {
-      game.movePlayer(directions(event.key));
-      return;
-    },
+    moveFunction,
     false
-  );
-}
-/* #endregion */
+    );
+  }
+  const moveFunction = (event) => {
+    game.movePlayer(directions(event.key));
+    return;
+  }
+  function setInnerHtml(page){
+    var html = pages(page);
+    if(html !== null){
+      __("#body", html)
+    }
+  }
+  /* #endregion */
+  /* #region Init */
+  setInnerHtml("start");
+  let game;
+  /* #endregion */
