@@ -427,9 +427,9 @@ const pages = (input) => ({
   <li> Your efforts will be in vain</li>
   </ul>
   <button onclick="startGame()">Start the Game</button>
-  <h3>Things you could do instead of playing this "game"</h3>
-  <ul id="alternatives">
-  </ul>`,
+  <h3>Thing you could do instead of playing this "game":</h3>
+  <p id="alternative">
+  </p>`,
   
   "game": `   <div id = "statusbar">
   <p>Super-Hero Ninja Cat!</p>
@@ -454,7 +454,7 @@ const pages = (input) => ({
   "end" : `<h1>
   Congratulations! <br> You saved all the kittens and won the game
   </h1>
-  <button onclick="location.reload()">Back To Title</button>`
+  <button onclick="startScreen()">Back To Title</button>`
 })[input]
 
 
@@ -480,6 +480,7 @@ async function startScreen() {
    await new Promise(r => setTimeout(r, 2000));
    document.querySelector("#style").href = "styles/startstyle.css";
    setInnerHtml("start");
+   setActivity();
 }
 function startGame() {
   document.querySelector("#style").href = "styles/style.css";
@@ -512,11 +513,16 @@ function setButtons() {
       __("#body", html)
     }
   }
+  async function setActivity(){
+    let response = await fetch("http://www.boredapi.com/api/activity?participants=1").then(x => x.json().then(data => data.activity));
+    __("#alternative", response);
+  }
   /* #endregion */
   /* #region Init */
   document.querySelector("#style").href = "styles/startstyle.css";
   // Not allowed by stupid browser!
   //document.styleSheets[0].href = "styles/startstyle.css";
   setInnerHtml("start");
+  setActivity();
   let game;
   /* #endregion */
