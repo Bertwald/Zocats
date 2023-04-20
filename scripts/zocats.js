@@ -478,9 +478,11 @@ const directions = (input) => ({
 async function startScreen() {
   document.removeEventListener("keydown", moveFunction);
    await new Promise(r => setTimeout(r, 2000));
+   document.querySelector("#style").href = "styles/startstyle.css";
    setInnerHtml("start");
 }
 function startGame() {
+  document.querySelector("#style").href = "styles/style.css";
   setInnerHtml("game");
   setButtons();
   game = new GameBoard;
@@ -488,6 +490,8 @@ function startGame() {
 async function endScreen(){
   document.removeEventListener("keydown", moveFunction);
   await new Promise(r => setTimeout(r, 2000));
+  //document.styleSheets[0].href = "styles/endstyle.css";
+  document.querySelector("#style").href = "styles/endstyle.css";
   setInnerHtml("end");
 }
 function setButtons() {
@@ -510,6 +514,9 @@ function setButtons() {
   }
   /* #endregion */
   /* #region Init */
+  document.querySelector("#style").href = "styles/startstyle.css";
+  // Not allowed by stupid browser!
+  //document.styleSheets[0].href = "styles/startstyle.css";
   setInnerHtml("start");
   let game;
   /* #endregion */

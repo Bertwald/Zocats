@@ -1,0 +1,21 @@
+body {
+   user-select: none;
+   background-image: url(../resources/endscreen.png);
+   background-color: darkgray;
+   background-repeat: no-repeat;
+   background-size: cover;
+}
+h1{
+   text-align: center;
+   color: brown;
+}
+button{
+   border: 1px solid lightgrey;
+   background-color:brown;
+   font-size:x-large;
+   color: goldenrod;
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+   width: fit-content;
+}
