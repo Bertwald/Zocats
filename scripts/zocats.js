@@ -146,7 +146,7 @@ class Zombie {
     return this.#sfxUrl2;
   }
   set sfxUrl2(url) {
-    this.#sfxUrl2;
+    this.#sfxUrl2 = url;
   }
   /**
 * Constructs the zombie data object
@@ -310,10 +310,10 @@ class GameBoard {
     this.updateObjects();
     this.collisionEvents(this.#player.position);
     if (this.checkCatCollision()) {
-      this.#player.catsFound++;
+      hasFoundAllKittens = 7 === ++this.#player.catsFound;
       this.#cat.position = getRandomCoords(this.#size, this.#player.position);
       this.#cat.imageUrl = `resources/kittens/${(this.#player.catsFound % 7) + 1}.png`
-      __("#savedcats", `Saved Cats: ${this.#player.catsFound}`);
+      __("#savedcats", `Kittens to save : ${ 7 - this.#player.catsFound}`);
     }
     if (this.checkZombieCollision()) {
       isDead = this.#player.reduceHealth();
@@ -332,8 +332,10 @@ class GameBoard {
     this.setDistances();
 
     if (isDead) {
+      console.log("You have lost");
       startScreen();
     } else if (hasFoundAllKittens) {
+      console.log("You have found all kittens");
       this.showEnding();
     }
   }
@@ -373,7 +375,7 @@ class GameBoard {
     let zombies = this.#zombies.filter(a => neighboring(a.position, cords));
     let zombiesnd;
     if (zombies.length > 0) {
-      zombiesnd = new Audio(this.#zombies[0].sfxUrl);
+      zombiesnd = new Audio(zombies[0].sfxUrl);
       zombiesnd.volume = 1.0;
     }
     if (zombiesnd != undefined) {
@@ -434,7 +436,8 @@ const directions = (input) => ({
 /* #endregion */
 /* #region Functions */
 function startScreen() {
-  __("#health", "99999999");
+  location.reload();
+  //__("#health", "99999999");
 }
 function startGame() {
 
