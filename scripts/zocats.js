@@ -514,11 +514,11 @@ function setButtons() {
     }
   }
   async function setActivity(){
-    let response = await fetch("http://www.boredapi.com/api/activity?participants=1").then(x => x.json().then(data => data.activity));
+    let response = await fetch("https://www.boredapi.com/api/activity?participants=1").then(x => x.json().then(data => data.activity));
     __("#alternative", response);
   }
   /* #endregion */
-  /* #region Init */
+/* #region Init */
   document.querySelector("#style").href = "styles/startstyle.css";
   // Not allowed by stupid browser!
   //document.styleSheets[0].href = "styles/startstyle.css";
